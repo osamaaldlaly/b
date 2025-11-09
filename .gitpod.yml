@@ -2,29 +2,34 @@
 image: gitpod/workspace-full:latest
 
 tasks:
-  - init: |
-      echo "🔧 Installing dependencies..."
+  - name: Setup & Run
+    init: |
+      echo "🔧 Installing global dependencies..."
       npm install -g truffle
+      echo "📦 Installing project dependencies..."
       npm install
     command: |
-      echo "🚀 Starting Truffle Develop (Blockchain Network)..."
-      truffle develop &
-      echo "🌐 Waiting a few seconds for blockchain to start..."
+      echo "🚀 Starting Truffle local blockchain..."
+      nohup truffle develop --log &
+      echo "🌐 Waiting for blockchain to initialize..."
       sleep 10
-      echo "💻 Starting development server..."
+      echo "💻 Starting frontend (React app)..."
       npm start
 
 ports:
   - port: 3000
     onOpen: open-preview
+    name: React Frontend
   - port: 8545
-    onOpen: notify
+    onOpen: ignore
+    name: Truffle Blockchain
 
 vscode:
   extensions:
     - JuanBlanco.solidity
     - dbaeumer.vscode-eslint
     - esbenp.prettier-vscode
+    - ms-vscode.vscode-typescript-next
 
 env:
   NODE_ENV: development
