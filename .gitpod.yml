@@ -1,0 +1,30 @@
+# .gitpod.yml
+image: gitpod/workspace-full:latest
+
+tasks:
+  - init: |
+      echo "🔧 Installing dependencies..."
+      npm install -g truffle
+      npm install
+    command: |
+      echo "🚀 Starting Truffle Develop (Blockchain Network)..."
+      truffle develop &
+      echo "🌐 Waiting a few seconds for blockchain to start..."
+      sleep 10
+      echo "💻 Starting development server..."
+      npm start
+
+ports:
+  - port: 3000
+    onOpen: open-preview
+  - port: 8545
+    onOpen: notify
+
+vscode:
+  extensions:
+    - JuanBlanco.solidity
+    - dbaeumer.vscode-eslint
+    - esbenp.prettier-vscode
+
+env:
+  NODE_ENV: development
